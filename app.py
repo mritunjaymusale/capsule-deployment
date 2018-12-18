@@ -6,15 +6,21 @@ from CapsNet import capsules
 import torch
 from torchvision import transforms
 import base64
+from CNN import Net
+from skimage import io
+
 device = torch.device("cpu")
 cuda = False
 
 A, B, C, D = 64, 8, 16, 16
 # add cnn model as well
-model = capsules(A=A, B=B, C=C, D=D, E=10,
-                 iters=2, cuda=False).to(device)
-model.load_state_dict(torch.load('./saved_model/mnist.pth'))
-model.eval()
+capsules_model = capsules(A=A, B=B, C=C, D=D, E=10,
+                          iters=2, cuda=False).to(device)
+capsules_model.load_state_dict(torch.load('./saved_model/mnist_capsules.pth'))
+capsules_model.eval()
+cnn_model = Net()
+cnn_model.load_state_dict(torch.load('./saved_model/mnist_cnn.pth'))
+
 app = Flask(__name__)
 
 
@@ -33,26 +39,32 @@ def basic():
 
 @app.route('/predict/', methods=['GET', 'POST'])
 def predict():
-    
+
     imgData = request.get_data()
 
     convertImage(imgData)
-
-    x = imread('output.png', mode='L')
+    x = imread('output.png',mode='L')
+    print(x.shape)
     x = np.invert(x)
     x = imresize(x, (28, 28))
     x = x.astype('float32')
-    x=x.reshape((1,1,28,28))
+    x = x.reshape((1, 1, 28, 28))
     x = torch.from_numpy(x)
-    
+
     # perform the prediction
-    out = model(x)
-    out =out.detach().numpy()
-    print(out)
+    caps_output = capsules_model(x)
+    caps_output = caps_output.detach().numpy()
+
+    cnn_output = cnn_model(x)
+    cnn_output = cnn_output.detach().numpy()
+
+    print(caps_output)
+    print(cnn_output)
     # convert the response to a string
-    response = np.array_str(out)
+    response = "Capsules output :"+np.array_str(np.argmax(
+        caps_output, axis=1))+" CNN output :"+np.array_str(np.argmax(cnn_output, axis=1))
     return response
 
 
 if __name__ == '__main__':
-    app.run(threaded=True, debug=True,host='0.0.0.0')
+    app.run(threaded=True, debug=True, host='0.0.0.0')
