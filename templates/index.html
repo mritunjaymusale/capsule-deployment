@@ -4,7 +4,72 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Handwritten Digit Recognition using Convolutional Neural Networks</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
+	<style type="text/css">
+		.capsuleButton {
+		-moz-box-shadow: 0px 10px 14px -7px #3e7327;
+		-webkit-box-shadow: 0px 10px 14px -7px #3e7327;
+		box-shadow: 0px 10px 14px -7px #3e7327;
+		background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4DAF7C), color-stop(1, #72b352));
+		background:-moz-linear-gradient(top, #4DAF7C 5%, #72b352 100%);
+		background:-webkit-linear-gradient(top, #4DAF7C 5%, #72b352 100%);
+		background:-o-linear-gradient(top, #4DAF7C 5%, #72b352 100%);
+		background:-ms-linear-gradient(top, #4DAF7C 5%, #72b352 100%);
+		background:linear-gradient(to bottom, #4DAF7C 5%, #72b352 100%);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#4DAF7C', endColorstr='#72b352',GradientType=0);
+		background-color:#4DAF7C;
+		-moz-border-radius:4px;
+		-webkit-border-radius:4px;
+		border-radius:4px;
+		border:1px solid #4b8f29;
+		display:inline-block;
+		cursor:pointer;
+		color:#ffffff;
+		font-family:Arial;
+		font-size:15px;
+		padding:6px 13px;
+		text-decoration:none;
+		text-shadow:0px 1px 0px #5b8a3c;
+		}
+
+		.cnnButton {
+		-moz-box-shadow: 0px 10px 14px -7px #3e7327;
+		-webkit-box-shadow: 0px 10px 14px -7px #3e7327;
+		box-shadow: 0px 10px 14px -7px #3e7327;
+		background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4DAF7C), color-stop(1, #72b352));
+		background:-moz-linear-gradient(top, #4DAF7C 5%, #72b352 100%);
+		background:-webkit-linear-gradient(top, #4DAF7C 5%, #72b352 100%);
+		background:-o-linear-gradient(top, #4DAF7C 5%, #72b352 100%);
+		background:-ms-linear-gradient(top, #4DAF7C 5%, #72b352 100%);
+		background:linear-gradient(to bottom, #4DAF7C 5%, #72b352 100%);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#4DAF7C', endColorstr='#72b352',GradientType=0);
+		background-color:#4DAF7C;
+		-moz-border-radius:4px;
+		-webkit-border-radius:4px;
+		border-radius:4px;
+		border:1px solid #4b8f29;
+		display:inline-block;
+		cursor:pointer;
+		color:#ffffff;
+		font-family:Arial;
+		font-size:15px;
+		padding:6px 13px;
+		text-decoration:none;
+		text-shadow:0px 1px 0px #5b8a3c;
+		}
+
+		body{
+			background-color: #333;
+			color: #fff;
+			text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+			box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+		}
+	</style>
 
 
 	<!-- <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"> -->
@@ -12,8 +77,10 @@
 </head>
 
 <body>
-
-	<h1>Handwritten Digit Recognition</h1>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<h1 class="navbar-brand"><em>Handwritten Digit Recognition using Capsule and CNN</em></h1>
+	</nav>
+	
 
 	<canvas id="canvas" width="280" height="280" style="border:8px solid; float: left; margin: 70px; margin-top:160px;  border-radius: 5px; cursor: crosshair;"></canvas>
 	<div id="debug" style="margin:65px; margin-top:100px;">
@@ -21,24 +88,27 @@
 
 		<!-- <input type="color" id="colors">
 			 <input type="number" id="lineWidth" style="width:60px" value="0.2" step="0.1" min="0.1">  -->
-		<input type="button" id="clearButton" value="Clear">
+		<input type="button" id="clearButton" value="Clear" class="btn primary-btn" style="margin-left:-350px;">
 		<br />
-		<span style="color: #4DAF7C; font-weight: 400; font-family: 'Open Sans', Helvetica;	">Draw the Digit inside this Box!</span>
+		<span style="color: #4DAF7C; font-weight: 400; font-family: 'Open Sans', Helvetica; margin-left:-350px">Draw the Digit inside this Box!</span>
 	</div>
 
-	<div style="margin-left:175px; margin-top:460px; float:left; position:absolute;">
+	<div style="margin-left:90px; margin-top:300px; float:left; position:absolute;">
 
-		<a href="#" class="capsuleButton"><span style=" font-weight: 400; font-family: 'Open Sans', Helvetica;	"> Predict
+		<a href="#" class="capsuleButton"><span style="font-weight:400;font-family:'Open Sans',Helvetica;"> Predict
 				Capsule</span></a>
-		<a href="#" class="cnnButton"><span style=" font-weight: 400; font-family: 'Open Sans', Helvetica;	"> Predict CNN</span></a>
+		<a href="#" class="cnnButton"><span style="font-weight:400;font-family:'Open Sans',Helvetica;"> Predict CNN</span></a>
 
 	</div>
 	<div>
 		<h1 id="result" style="margin-right:20px; margin-top:300px;float:left;"><span> </span></h1>
 	</div>
-	<img src="" alt="" id="capsule_img">
-	<img src="" alt="" id="cnn_img">
+	<div class="container" style="margin-top: -150px;">
+		<img src="" alt="" id="capsule_img" width="550" height="450" >
+		<img src="" alt="" id="cnn_img" width="550" height="450" >
 
+	</div>
+	
 
 	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 

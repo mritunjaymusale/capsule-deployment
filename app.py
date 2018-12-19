@@ -61,8 +61,11 @@ def predict():
     
     values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     plt.clf()
-    
-    sns.barplot(x=values, y=list(caps))
+    sns.set_style('darkgrid')
+    sns.barplot(x=values, y=list(caps), palette='Blues_d')
+    plt.xlabel('Digits to be classified')
+    plt.ylabel('Probabilities')
+    plt.title('Capsule Networks')
     plt.savefig('./static/capsules.png')
     response =''
     with open('./static/capsules.png','rb') as file:
@@ -80,8 +83,14 @@ def cnn_predict():
     cnn = cnn_output.flat
     values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     plt.clf()
-    
-    sns.barplot(x=values, y=list(cnn))
+    sns.set_style('darkgrid')
+    sns.barplot(x=values, y=list(cnn), palette='Greens_d')
+    plt.xlabel('Digits to be classified')
+    plt.ylabel('Probabilities')
+    plt.title('Convolutional Neural Networks')
+    # cnn_graph.title("The probability of the lowest element represents the output")
+    # cnn_graph.set_xlabel('Digits to be classified')
+    # cnn_graph.set_ylabel('Probability')
     plt.savefig('./static/cnn.png')
     response =''
     with open('./static/cnn.png','rb') as file:
