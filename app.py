@@ -8,6 +8,9 @@ from torchvision import transforms
 import base64
 from CNN import Net
 from skimage import io
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 device = torch.device("cpu")
 cuda = False
@@ -44,7 +47,6 @@ def predict():
 
     convertImage(imgData)
     x = imread('output.png',mode='L')
-    print(x.shape)
     x = np.invert(x)
     x = imresize(x, (28, 28))
     x = x.astype('float32')
@@ -54,12 +56,14 @@ def predict():
     # perform the prediction
     caps_output = capsules_model(x)
     caps_output = caps_output.detach().numpy()
-
+    caps = caps_output.flat
     cnn_output = cnn_model(x)
     cnn_output = cnn_output.detach().numpy()
-
-    print(caps_output)
-    print(cnn_output)
+    values = [0,1,2,3,4,5,6,7,8,9]
+    plt.clf()
+    sns.barplot(x=values, y=list(caps))
+    plt.savefig('./static/caps_prob.png')
+    
     # convert the response to a string
     response = "Capsules output :"+np.array_str(np.argmax(
         caps_output, axis=1))+" CNN output :"+np.array_str(np.argmax(cnn_output, axis=1))
