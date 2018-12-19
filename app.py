@@ -31,18 +31,7 @@ def convertImage(imgData1):
     with open('output.png', 'wb') as output:
         output.write(base64.b64decode(imgstr))
 
-
-@app.route('/', methods=['GET', 'POST'])
-def basic():
-
-    return render_template('index.html')
-
-
-@app.route('/predict/', methods=['GET', 'POST'])
-def predict():
-
-    imgData = request.get_data()
-
+def getInput(imgData):
     convertImage(imgData)
     x = imread('output.png', mode='L')
     x = np.invert(x)
@@ -50,13 +39,26 @@ def predict():
     x = x.astype('float32')
     x = x.reshape((1, 1, 28, 28))
     x = torch.from_numpy(x)
+    return x
+
+@app.route('/', methods=['GET', 'POST'])
+def basic():
+
+    return render_template('index.html')
+
+
+@app.route('/capsule/', methods=['GET', 'POST'])
+def predict():
+
+    imgData = request.get_data()
+
+    x = getInput(imgData)
 
     # perform the prediction
     caps_output = capsules_model(x)
     caps_output = caps_output.detach().numpy()
     caps = caps_output.flat
-    cnn_output = cnn_model(x)
-    cnn_output = cnn_output.detach().numpy()
+    
     values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     plt.clf()
     
@@ -67,6 +69,23 @@ def predict():
         response = base64.b64encode(file.read())
     return response
 
+@app.route('/cnn/',methods=['GET','POST'])
+def cnn_predict():
+    imgData = request.get_data()
+
+    x = getInput(imgData)
+    cnn_output = cnn_model(x)
+    cnn_output = cnn_output.detach().numpy()
+    cnn = cnn_output.flat
+    values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    plt.clf()
+    
+    sns.barplot(x=values, y=list(cnn))
+    plt.savefig('./static/cnn.png')
+    response =''
+    with open('./static/cnn.png','rb') as file:
+        response = base64.b64encode(file.read())
+    return response
 
 if __name__ == '__main__':
     app.run(threaded=True, debug=True, host='0.0.0.0')
