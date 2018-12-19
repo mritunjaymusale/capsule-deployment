@@ -76,6 +76,7 @@ def cnn_predict():
     x = getInput(imgData)
     cnn_output = cnn_model(x)
     cnn_output = cnn_output.detach().numpy()
+    cnn_output = cnn_output *-1
     cnn = cnn_output.flat
     values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     plt.clf()
