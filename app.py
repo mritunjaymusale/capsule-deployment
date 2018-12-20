@@ -18,10 +18,10 @@ A, B, C, D = 64, 8, 16, 16
 # add cnn model as well
 capsules_model = capsules(A=A, B=B, C=C, D=D, E=10,
                           iters=2, cuda=False).to(device)
-capsules_model.load_state_dict(torch.load('./saved_model/mnist_capsules.pth'))
+capsules_model.load_state_dict(torch.load('./saved_model/mnist_capsules.pth',map_location=device))
 capsules_model.eval()
 cnn_model = Net()
-cnn_model.load_state_dict(torch.load('./saved_model/mnist_cnn.pth'))
+cnn_model.load_state_dict(torch.load('./saved_model/mnist_cnn.pth',map_location=device))
 app = Flask(__name__)
 
 
@@ -67,6 +67,7 @@ def predict():
     plt.ylabel('Probabilities')
     plt.title('Capsule Networks')
     plt.savefig('./static/capsules.png')
+    plt.clf()
     response =''
     with open('./static/capsules.png','rb') as file:
         response = base64.b64encode(file.read())
@@ -86,12 +87,10 @@ def cnn_predict():
     sns.set_style('darkgrid')
     sns.barplot(x=values, y=list(cnn), palette='Greens_d')
     plt.xlabel('Digits to be classified')
-    plt.ylabel('Probabilities')
+    plt.ylabel('Inverse Probabilities')
     plt.title('Convolutional Neural Networks')
-    # cnn_graph.title("The probability of the lowest element represents the output")
-    # cnn_graph.set_xlabel('Digits to be classified')
-    # cnn_graph.set_ylabel('Probability')
     plt.savefig('./static/cnn.png')
+    plt.clf()
     response =''
     with open('./static/cnn.png','rb') as file:
         response = base64.b64encode(file.read())
