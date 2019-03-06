@@ -1,4 +1,7 @@
 *.pth
 .vscode
 __pycache__
+**/cnn.png
+**/capsules.png
 output.png
+saved_model
